@@ -5,7 +5,8 @@ var authConfig = require('../../config/auth');
 
 function generateToken(user){
 	return jwt.sign(user, authConfig.secret, {
-		expiresIn: 10080
+		expiresIn: 10080,
+		algorithm: 'HS256'
 	});
 }
 
@@ -36,6 +37,9 @@ exports.authenticate = function(req, res, next) {
 
    if(req.headers.authorization) {
   var  token = req.headers.authorization
+   } else {
+      return res.status(400)
+        .json({message: "no token provided."})
    }
   console.log("token="+ token);
   verifyJWTToken(token)
